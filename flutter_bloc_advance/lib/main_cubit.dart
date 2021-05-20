@@ -7,14 +7,13 @@ class CounterCubit extends Cubit<int> {
   void decrement() => emit(state - 1);
 }
 
-void main(List<String> args) {
+void main(List<String> args) async {
   final cubit = CounterCubit();
-  print(cubit.state);
+  final streamSubscription = cubit.listen(print);
   cubit.increment();
-  print(cubit.state);
   cubit.increment();
-  print(cubit.state);
-  cubit.decrement();
-  print(cubit.state);
-  cubit.close();
+  cubit.increment();
+  await Future.delayed(Duration.zero);
+  await streamSubscription.cancel();
+  await cubit.close();
 }
